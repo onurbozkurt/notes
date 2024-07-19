@@ -1,6 +1,7 @@
 class NotesController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:index]
   def index
-    @notes = Note.order(created_at: :desc)
+    @notes = current_user.notes.order(created_at: :desc)
   end
 
   def new
@@ -8,7 +9,7 @@ class NotesController < ApplicationController
   end
 
   def create
-    @note = Note.new(note_params)
+    @note = current_user.notes.new(note_params)
     if @note.save
       redirect_to notes_path
     else
@@ -17,11 +18,11 @@ class NotesController < ApplicationController
   end
 
   def edit
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
   end
 
   def update
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     if @note.update(note_params)
       redirect_to notes_path
     else
@@ -30,7 +31,7 @@ class NotesController < ApplicationController
   end
 
   def destroy
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     @note.destroy
     redirect_to notes_path
   end

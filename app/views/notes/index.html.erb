@@ -1,7 +1,14 @@
 <h1 class="font-bold text-4xl mb-4">Notes</h1>
-<div class="flex flex-col gap-2">
-  <%= link_to "+ Add", new_note_path, class: "font-bold" %>
-  <% @notes.each do |note| %>
-    <%= render note %>
+
+<% if user_logged_in? %>
+  <div class="flex flex-col gap-2">
+    <%= link_to "+ Add", new_note_path, class: "font-bold" %>
+    <% @notes.each do |note| %>
+      <%= render note %>
+    <% end %>
+  </div>
+<% else %>
+  <%= form_tag('/auth/github', method: 'post', data: { turbo: false }) do %>
+    <button type='submit'>Login with Github</button>
   <% end %>
-</div>
+<% end %>
